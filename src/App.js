@@ -1,25 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import Cotizador from './components/Cotizador';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<div className="App bg-gray-700 min-h-screen">
+			<header className=" border-solid border-2 border-white  py-4 px-2 rounded-md">
+				<nav>
+					<ul className="text-white text-xl font-semibold">
+						<li>
+							<a href="/">Inicio</a>
+						</li>
+					</ul>
+				</nav>
+			</header>
+			<Cotizador />
+			<footer className="h-16 border-solid border-2 border-white">
+				Soy el footer
+			</footer>
+		</div>
+	);
 }
 
 export default App;
