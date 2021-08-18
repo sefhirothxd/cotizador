@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import Pdf from 'react-to-pdf';
-const ref = React.createRef();
-const options = {
-	orientation: 'landscape',
-	unit: 'in',
-	format: [8, 12],
-};
+// import Pdf from 'react-to-pdf';
+import { jsPDF } from 'jspdf';
+import Data from '../data.json';
+import { TablejsModule } from '@transunion-ui/tablejs';
 
 const Cotizador = () => {
 	const {
@@ -15,512 +12,7 @@ const Cotizador = () => {
 		// watch,
 		// formState: { errors },
 	} = useForm();
-	const [herramientas, setHerramientas] = useState([
-		{
-			id: 1,
-			nombre: 'NERM2001H-L',
-			capacidad: '125',
-			cadena: 'Grado 80, niquelada de 4.3 mm',
-			ramales: '1',
-			velocidadte: '16.8',
-			rendimientote: '0.56 kW (0.75 HP)',
-			velocidadto: '12.2',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 58 a 127 mm',
-			opcional: 'De 128 a 153 mm o 154 a 305 mm',
-			peso: 58,
-			field13: '0.42',
-			field14: '800',
-			precio: 9249,
-			field16: '147',
-		},
-		{
-			id: 2,
-			nombre: 'NERM2001H-S',
-			capacidad: '125',
-			cadena: 'Grado 80, niquelada de 4.3 mm',
-			ramales: '1',
-			velocidadte: '16.8',
-			rendimientote: '0.56 kW (0.75 HP)',
-			velocidadto: '24.4',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 58 a 127 mm',
-			opcional: 'De 128 a 153 mm o 154 a 305 mm',
-			peso: 58,
-			field13: '0.42',
-			field14: '800',
-			precio: 9249,
-			field16: '147',
-		},
-		{
-			id: 3,
-			nombre: 'NERM2003S-L',
-			capacidad: '250',
-			cadena: 'Grado 80, niquelada de 4.3 mm',
-			ramales: '1',
-			velocidadte: '11',
-			rendimientote: '0.56 kW (0.75 HP)',
-			velocidadto: '12.2',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 58 a 127 mm',
-			opcional: 'De 128 a 153 mm o 154 a 305 mm',
-			peso: 58,
-			field13: '0.42',
-			field14: '800',
-			precio: 8606,
-			field16: '147',
-		},
-		{
-			id: 4,
-			nombre: 'NERM2003S-S',
-			capacidad: '250',
-			cadena: 'Grado 80, niquelada de 4.3 mm',
-			ramales: '1',
-			velocidadte: '11',
-			rendimientote: '0.56 kW (0.75 HP)',
-			velocidadto: '24.4',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 58 a 127 mm',
-			opcional: 'De 128 a 153 mm o 154 a 305 mm',
-			peso: 58,
-			field13: '0.42',
-			field14: '800',
-			precio: 8606,
-			field16: '147',
-		},
-		{
-			id: 5,
-			nombre: 'NERM2003H-L',
-			capacidad: '250',
-			cadena: 'Grado 80, niquelada de 6.0 mm',
-			ramales: '1',
-			velocidadte: '16.2',
-			rendimientote: '0.9 kW (1.2 HP)',
-			velocidadto: '12.2',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 58 a 127 mm',
-			opcional: 'De 128 a 153 mm o 154 a 305 mm',
-			peso: 67,
-			field13: '0.81',
-			field14: '800',
-			precio: 9969,
-			field16: '148',
-		},
-		{
-			id: 6,
-			nombre: 'NERM2003H-S',
-			capacidad: '250',
-			cadena: 'Grado 80, niquelada de 6.0 mm',
-			ramales: '1',
-			velocidadte: '16.2',
-			rendimientote: '0.9 kW (1.2 HP)',
-			velocidadto: '24.4',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 58 a 127 mm',
-			opcional: 'De 128 a 153 mm o 154 a 305 mm',
-			peso: 67,
-			field13: '0.81',
-			field14: '800',
-			precio: 9969,
-			field16: '148',
-		},
-		{
-			id: 7,
-			nombre: 'NERM2005L-L',
-			capacidad: '500',
-			cadena: 'Grado 80, niquelada de 6.0 mm',
-			ramales: '1',
-			velocidadte: '4.6',
-			rendimientote: '0.56 kW (0.75 HP)',
-			velocidadto: '12.2',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 58 a 127 mm',
-			opcional: 'De 128 a 153 mm o 154 a 305 mm',
-			peso: 63,
-			field13: '0.81',
-			field14: '800',
-			precio: 8583,
-			field16: '148',
-		},
-		{
-			id: 8,
-			nombre: 'NERM2005L-S',
-			capacidad: '500',
-			cadena: 'Grado 80, niquelada de 6.0 mm',
-			ramales: '1',
-			velocidadte: '4.6',
-			rendimientote: '0.56 kW (0.75 HP)',
-			velocidadto: '24.4',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 58 a 127 mm',
-			opcional: 'De 128 a 153 mm o 154 a 305 mm',
-			peso: 63,
-			field13: '0.81',
-			field14: '800',
-			precio: 8583,
-			field16: '148',
-		},
-		{
-			id: 9,
-			nombre: 'NERM2005S-L',
-			capacidad: '500',
-			cadena: 'Grado 80, niquelada de 6.0 mm',
-			ramales: '1',
-			velocidadte: '8.8',
-			rendimientote: '0.9 kW (1.2 HP)',
-			velocidadto: '12.2',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 58 a 127 mm',
-			opcional: 'De 128 a 153 mm o 154 a 305 mm',
-			peso: 67,
-			field13: '0.81',
-			field14: '800',
-			precio: 9389,
-			field16: '148',
-		},
-		{
-			id: 10,
-			nombre: 'NERM2005S-S',
-			capacidad: '500',
-			cadena: 'Grado 80, niquelada de 6.0 mm',
-			ramales: '1',
-			velocidadte: '8.8',
-			rendimientote: '0.9 kW (1.2 HP)',
-			velocidadto: '24.4',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 58 a 127 mm',
-			opcional: 'De 128 a 153 mm o 154 a 305 mm',
-			peso: 67,
-			field13: '0.81',
-			field14: '800',
-			precio: 9389,
-			field16: '148',
-		},
-		{
-			id: 11,
-			nombre: 'NERM2010L-L',
-			capacidad: '1000',
-			cadena: 'Grado 80, niquelada de 7.7 mm',
-			ramales: '1',
-			velocidadte: '4.3',
-			rendimientote: '0.9 kW (1.2 HP)',
-			velocidadto: '12.2',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 58 a 127 mm',
-			opcional: 'De 128 a 153 mm o 154 a 305 mm',
-			peso: 77,
-			field13: '1.33',
-			field14: '800',
-			precio: 9093,
-			field16: '163',
-		},
-		{
-			id: 12,
-			nombre: 'NERM2010L-S',
-			capacidad: '1000',
-			cadena: 'Grado 80, niquelada de 7.7 mm',
-			ramales: '1',
-			velocidadte: '4.3',
-			rendimientote: '0.9 kW (1.2 HP)',
-			velocidadto: '24.4',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 58 a 127 mm',
-			opcional: 'De 128 a 153 mm o 154 a 305 mm',
-			peso: 77,
-			field13: '1.33',
-			field14: '800',
-			precio: 9093,
-			field16: '163',
-		},
-		{
-			id: 13,
-			nombre: 'NERM2010S-L',
-			capacidad: '1000',
-			cadena: 'Grado 80, niquelada de 7.7 mm',
-			ramales: '1',
-			velocidadte: '8.5',
-			rendimientote: '1.8 kW (2.4 HP)',
-			velocidadto: '12.2',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 58 a 127 mm',
-			opcional: 'De 128 a 153 mm o 154 a 305 mm',
-			peso: 84,
-			field13: '1.33',
-			field14: '800',
-			precio: 10691,
-			field16: '163',
-		},
-		{
-			id: 14,
-			nombre: 'NERM2010S-S',
-			capacidad: '1000',
-			cadena: 'Grado 80, niquelada de 7.7 mm',
-			ramales: '1',
-			velocidadte: '8.5',
-			rendimientote: '1.8 kW (2.4 HP)',
-			velocidadto: '24.4',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 58 a 127 mm',
-			opcional: 'De 128 a 153 mm o 154 a 305 mm',
-			peso: 84,
-			field13: '1.33',
-			field14: '800',
-			precio: 10691,
-			field16: '163',
-		},
-		{
-			id: 15,
-			nombre: 'NERM2015S-L',
-			capacidad: '1500',
-			cadena: 'Grado 80, niquelada de 10.2 mm',
-			ramales: '1',
-			velocidadte: '5.5',
-			rendimientote: '1.8 kW (2.4 HP)',
-			velocidadto: '12.2',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 82 a 153 mm',
-			opcional: 'De 154 a 178 mm o 179 a 305 mm',
-			peso: 11,
-			field13: '2.3',
-			field14: '800',
-			precio: 12355,
-			field16: '205',
-		},
-		{
-			id: 16,
-			nombre: 'NERM2015S-S',
-			capacidad: '1500',
-			cadena: 'Grado 80, niquelada de 10.2 mm',
-			ramales: '1',
-			velocidadte: '5.5',
-			rendimientote: '1.8 kW (2.4 HP)',
-			velocidadto: '24.4',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 82 a 153 mm',
-			opcional: 'De 154 a 178 mm o 179 a 305 mm',
-			peso: 11,
-			field13: '2.3',
-			field14: '800',
-			precio: 12355,
-			field16: '205',
-		},
-		{
-			id: 17,
-			nombre: 'NERM2020C-L',
-			capacidad: '2000',
-			cadena: 'Grado 80, niquelada de 7.7 mm',
-			ramales: '2',
-			velocidadte: '2.1',
-			rendimientote: '0.9 kW (1.2 HP)',
-			velocidadto: '12.2',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 82 a 153 mm',
-			opcional: 'De 154 a 178 mm o 179 a 305 mm',
-			peso: 97,
-			field13: '2.7',
-			field14: '800',
-			precio: 10547,
-			field16: '261',
-		},
-		{
-			id: 18,
-			nombre: 'NERM2020C-S',
-			capacidad: '2000',
-			cadena: 'Grado 80, niquelada de 7.7 mm',
-			ramales: '2',
-			velocidadte: '2.1',
-			rendimientote: '0.9 kW (1.2 HP)',
-			velocidadto: '24.4',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 82 a 153 mm',
-			opcional: 'De 154 a 178 mm o 179 a 305 mm',
-			peso: 97,
-			field13: '2.7',
-			field14: '800',
-			precio: 10547,
-			field16: '261',
-		},
-		{
-			id: 19,
-			nombre: 'NERM2020L-L',
-			capacidad: '2000',
-			cadena: 'Grado 80, niquelada de 10.2 mm',
-			ramales: '1',
-			velocidadte: '4.3',
-			rendimientote: '1.8 kW (2.4 HP)',
-			velocidadto: '12.2',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 82 a 153 mm',
-			opcional: 'De 154 a 178 mm o 179 a 305 mm',
-			peso: 11,
-			field13: '2.3',
-			field14: '800',
-			precio: 11424,
-			field16: '205',
-		},
-		{
-			id: 20,
-			nombre: 'NERM2020L-S',
-			capacidad: '2000',
-			cadena: 'Grado 80, niquelada de 10.2 mm',
-			ramales: '1',
-			velocidadte: '4.3',
-			rendimientote: '1.8 kW (2.4 HP)',
-			velocidadto: '24.4',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 82 a 153 mm',
-			opcional: 'De 154 a 178 mm o 179 a 305 mm',
-			peso: 11,
-			field13: '2.3',
-			field14: '800',
-			precio: 11424,
-			field16: '205',
-		},
-		{
-			id: 21,
-			nombre: 'NERM2020S-L',
-			capacidad: '2000',
-			cadena: 'Grado 80, niquelada de 10.2 mm',
-			ramales: '1',
-			velocidadte: '8.5',
-			rendimientote: '3.5 kW (4.7 HP)',
-			velocidadto: '12.2',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 82 a 153 mm',
-			opcional: 'De 154 a 178 mm o 179 a 305 mm',
-			peso: 12,
-			field13: '2.3',
-			field14: '800',
-			precio: 13827,
-			field16: '205',
-		},
-		{
-			id: 22,
-			nombre: 'NERM2020S-S',
-			capacidad: '2000',
-			cadena: 'Grado 80, niquelada de 10.2 mm',
-			ramales: '1',
-			velocidadte: '8.5',
-			rendimientote: '3.5 kW (4.7 HP)',
-			velocidadto: '24.4',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 82 a 153 mm',
-			opcional: 'De 154 a 178 mm o 179 a 305 mm',
-			peso: 12,
-			field13: '2.3',
-			field14: '800',
-			precio: 13827,
-			field16: '205',
-		},
-		{
-			id: 23,
-			nombre: 'NERM2025S-L',
-			capacidad: '2500',
-			cadena: 'Grado 80, niquelada de 11.2 mm',
-			ramales: '1',
-			velocidadte: '6.7',
-			rendimientote: '3.5 kW (4.7 HP)',
-			velocidadto: '12.2',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 82 a 153 mm',
-			opcional: 'De 154 a 178 mm o 179 a 305 mm',
-			peso: 15,
-			field13: '2.8',
-			field14: '1000',
-			precio: 14837,
-			field16: '243',
-		},
-		{
-			id: 24,
-			nombre: 'NERM2025S-S',
-			capacidad: '2500',
-			cadena: 'Grado 80, niquelada de 11.2 mm',
-			ramales: '1',
-			velocidadte: '6.7',
-			rendimientote: '3.5 kW (4.7 HP)',
-			velocidadto: '24.4',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 82 a 153 mm',
-			opcional: 'De 154 a 178 mm o 179 a 305 mm',
-			peso: 15,
-			field13: '2.8',
-			field14: '1000',
-			precio: 14837,
-			field16: '243',
-		},
-		{
-			id: 25,
-			nombre: 'NERM2030C-L',
-			capacidad: '3000',
-			cadena: 'Grado 80, niquelada de 10.2 mm',
-			ramales: '2',
-			velocidadte: '5.2',
-			rendimientote: '3.5 kW (4.7 HP)',
-			velocidadto: '12.2',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 82 a 153 mm',
-			opcional: 'De 154 a 178 mm o 179 a 305 mm',
-			peso: 15,
-			field13: '4.7',
-			field14: '1000',
-			precio: 14272,
-			field16: '344',
-		},
-		{
-			id: 26,
-			nombre: 'NERM2030C-S',
-			capacidad: '3000',
-			cadena: 'Grado 80, niquelada de 10.2 mm',
-			ramales: '2',
-			velocidadte: '5.2',
-			rendimientote: '3.5 kW (4.7 HP)',
-			velocidadto: '24.4',
-			rendimientoto: '0.4 kW (0.54 HP)',
-			anchopatin: 'De 82 a 153 mm',
-			opcional: 'De 154 a 178 mm o 179 a 305 mm',
-			peso: 15,
-			field13: '4.7',
-			field14: '1000',
-			precio: 14272,
-			field16: '344',
-		},
-		{
-			id: 27,
-			nombre: 'NERM2050L-L',
-			capacidad: '5000',
-			cadena: 'Grado 80, niquelada de 11.2 mm',
-			ramales: '2',
-			velocidadte: '3.4',
-			rendimientote: '3.5 kW (4.7 HP)',
-			velocidadto: '12.2',
-			rendimientoto: '0.75 kW (1.00HP)',
-			anchopatin: 'De 100 a 178 mm',
-			opcional: 'De 169 a 193 mm o 194 a 305 mm',
-			peso: 20,
-			field13: '5.6',
-			field14: '1800',
-			precio: 16927,
-			field16: '373',
-		},
-		{
-			id: 28,
-			nombre: 'NERM2050L-S',
-			capacidad: '5000',
-			cadena: 'Grado 80, niquelada de 11.2 mm',
-			ramales: '2',
-			velocidadte: '3.4',
-			rendimientote: '3.5 kW (4.7 HP)',
-			velocidadto: '24.4',
-			rendimientoto: '0.75 kW (1.00HP)',
-			anchopatin: 'De 100 a 178 mm',
-			opcional: 'De 169 a 193 mm o 194 a 305 mm',
-			peso: 20,
-			field13: '5.6',
-			field14: '1800',
-			precio: 16927,
-			field16: '373',
-		},
-	]);
+	const [herramientas, setHerramientas] = useState([]);
 	const [seleccionado, setSeleccionado] = useState();
 
 	const [tabla, setTabla] = useState([]);
@@ -582,9 +74,22 @@ const Cotizador = () => {
 		console.log(agregar);
 	};
 
+	const pdf = () => {
+		const doc = new jsPDF();
+
+		doc.text('Hello world!', 10, 10);
+		// doc.autoPrint();
+		doc.save();
+	};
+
 	useEffect(() => {
 		pagoFinal();
 	}, [tabla]);
+
+	useEffect(() => {
+		setHerramientas(Data);
+		console.log(Data);
+	}, []);
 
 	return (
 		<div className="container mx-auto min-h">
@@ -592,55 +97,77 @@ const Cotizador = () => {
 				Cotizador
 			</h1>
 			<div className="border-2 border-white mt-16">
-				<div></div>
 				<div className="p-10">
 					<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
-						<select {...register('herramienta')} onChange={probando}>
+						<select
+							className="my-4"
+							{...register('herramienta')}
+							onChange={probando}
+						>
 							<option value="0">Seleccionar</option>
-							<option value="1">NERM2001H-L</option>
-							<option value="2">NERM2001H-S</option>
-							<option value="3">NERM2003S-L</option>
+							{Data.map((item) => {
+								return <option value={item.id}>{item.nombre}</option>;
+							})}
 						</select>
 						{seleccionado ? (
-							<div>
-								<label className="text-white" htmlFor="">
-									Capacidad:
-								</label>
-								<input
-									type="text"
-									name="capacidad"
-									value={seleccionado[0].capacidad}
-								/>
-								<label className="text-white" htmlFor="">
-									Longuitud de izaje:
-								</label>
-								<input type="text" name="capacidad" value="6" />
-								<label className="text-white" htmlFor="">
-									Cadena de carga:
-								</label>
-								<input
-									type="text"
-									name="capacidad"
-									value={seleccionado[0].cadena}
-								/>
-								<label className="text-white" htmlFor="">
-									Precio:
-								</label>
-								<input
-									type="text"
-									name="capacidad"
-									value={seleccionado[0].precio}
-								/>
+							<div className="mb-4 flex justify-start items-center flex-wrap  gap-3 w-full">
+								<div className="flex items-center">
+									<label className="text-white mr-2" htmlFor="">
+										Capacidad:
+									</label>
+									<input
+										className="px-1 mr-3"
+										type="text"
+										name="capacidad"
+										value={seleccionado[0].capacidad}
+									/>
+								</div>
+								<div className="flex items-center">
+									<label className="text-white mr-3" htmlFor="">
+										Longuitud de izaje:
+									</label>
+									<input
+										className="px-1 mr-3"
+										type="text"
+										name="capacidad"
+										value="6"
+									/>
+								</div>
+								<div className="flex items-center">
+									<label className="text-white mr-3" htmlFor="">
+										Cadena de carga:
+									</label>
+									<input
+										className="px-1 mr-3 w-9/12"
+										type="text"
+										name="capacidad"
+										value={seleccionado[0].cadena}
+									/>
+								</div>
+								<div className="flex items-center">
+									<label className="text-white mr-3" htmlFor="">
+										Precio:
+									</label>
+									<input
+										className="px-1 mr-3"
+										type="text"
+										name="capacidad"
+										value={seleccionado[0].precio}
+									/>
+								</div>
 							</div>
 						) : null}
-						<button className="bg-white border-2 border-black" type="submit">
+						<button
+							className="bg-white border-2 border-black py-2 w-36"
+							type="submit"
+						>
 							Agregar
 						</button>
 					</form>
 				</div>
 			</div>
-			<div ref={ref}>
-				<table className="rounded-t-lg m-5 w-full mx-auto bg-gray-200 text-gray-800">
+			<div>
+				{/* <table className="rounded-t-lg m-5 w-full mx-auto bg-gray-200 text-gray-800">
 					<tbody>
 						<tr className="text-left border-b-2 border-gray-300">
 							<th className="px-4 py-3">Nombre</th>
@@ -671,7 +198,188 @@ const Cotizador = () => {
 							<h1 className="text-red text-2xl pl-4 py-4">No hay datos</h1>
 						)}
 					</tbody>
+				</table> */}
+				<table className="border w-full sm:table block overflow-x-auto ">
+					<thead>
+						<tr className="bg-gray-50 border-b">
+							<th className="border-r p-2">
+								<input type="checkbox" />
+							</th>
+							<th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+								<div className="flex items-center justify-center">
+									Nombre
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										className="h-4 w-4"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+										/>
+									</svg>
+								</div>
+							</th>
+							<th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+								<div className="flex items-center justify-center">
+									Capacidad
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										className="h-4 w-4"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+										/>
+									</svg>
+								</div>
+							</th>
+							<th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+								<div className="flex items-center justify-center">
+									Peso
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										className="h-4 w-4"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+										/>
+									</svg>
+								</div>
+							</th>
+							<th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+								<div className="flex items-center justify-center">
+									Precio
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										className="h-4 w-4"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+										/>
+									</svg>
+								</div>
+							</th>
+							<th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+								<div className="flex items-center justify-center">
+									Cantidad
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										className="h-4 w-4"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+										/>
+									</svg>
+								</div>
+							</th>
+							<th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+								<div className="flex items-center justify-center">
+									Costo Total
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										className="h-4 w-4"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+										/>
+									</svg>
+								</div>
+							</th>
+							<th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+								<div className="flex items-center justify-center">
+									Action
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										className="h-4 w-4"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="2"
+											d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+										/>
+									</svg>
+								</div>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						{tabla.length > 0 ? (
+							tabla.map((tabla) => {
+								return (
+									<tr
+										key={tabla.id}
+										className="bg-gray-100 text-center border-b text-sm text-gray-600"
+									>
+										<td className="p-2 border-r">
+											<input type="checkbox" />
+										</td>
+										<td className="p-2 border-r">{tabla.nombre}</td>
+										<td className="p-2 border-r">{tabla.capacidad}</td>
+										<td className="p-2 border-r">{tabla.peso}</td>
+										<td className="p-2 border-r">{tabla.precio}</td>
+										<td className="p-2 border-r">{tabla.cantidad}</td>
+										<td className="p-2 border-r">{tabla.costoTotal}</td>
+										<td>
+											<a
+												href="#"
+												className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin"
+											>
+												Edit
+											</a>
+											<a
+												href="#"
+												className="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin"
+											>
+												Remove
+											</a>
+										</td>
+									</tr>
+								);
+							})
+						) : (
+							<h1 className="text-red text-2xl pl-4 py-4">No hay datos</h1>
+						)}
+					</tbody>
 				</table>
+
 				{tabla.length > 0 ? (
 					<p className="text-white text-right text-2xl">
 						Pago Final: {costoTotal}
@@ -680,28 +388,19 @@ const Cotizador = () => {
 					<p className="text-white text-right text-2xl">Pago Final: 0</p>
 				)}
 			</div>
-			<Pdf
-				targetRef={ref}
-				options={options}
-				// scale={2}
-				filename="code-example.pdf"
+			<button
+				onClick={pdf}
+				className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
 			>
-				{({ toPdf }) => (
-					<button
-						onClick={toPdf}
-						className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
-					>
-						<svg
-							className="fill-current w-4 h-4 mr-2"
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 20 20"
-						>
-							<path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
-						</svg>
-						<span>Descargar pdf</span>
-					</button>
-				)}
-			</Pdf>
+				<svg
+					className="fill-current w-4 h-4 mr-2"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 20 20"
+				>
+					<path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
+				</svg>
+				<span>Descargar pdf</span>
+			</button>
 		</div>
 	);
 };
