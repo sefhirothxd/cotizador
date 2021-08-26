@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 // import Pdf from 'react-to-pdf';
 import { jsPDF } from 'jspdf';
 import Data from '../data.json';
-import { TablejsModule } from '@transunion-ui/tablejs';
+// import { TablejsModule } from '@transunion-ui/tablejs';
 
 const Cotizador = () => {
 	const {
@@ -17,7 +17,9 @@ const Cotizador = () => {
 
 	const [tabla, setTabla] = useState([]);
 	const [costoTotal, setcostoTotal] = useState(0);
+
 	const onSubmit = (data) => {
+		console.log(data);
 		if (data.herramienta == '0') {
 			return;
 		}
@@ -74,6 +76,12 @@ const Cotizador = () => {
 		console.log(agregar);
 	};
 
+	const removeTool = (data) => {
+		let filterTable = tabla.filter((item) => item.id !== data);
+
+		setTabla(filterTable);
+	};
+
 	const pdf = () => {
 		const doc = new jsPDF();
 
@@ -106,7 +114,11 @@ const Cotizador = () => {
 						>
 							<option value="0">Seleccionar</option>
 							{Data.map((item) => {
-								return <option value={item.id}>{item.nombre}</option>;
+								return (
+									<option key={item.id} value={item.id}>
+										{item.nombre}
+									</option>
+								);
 							})}
 						</select>
 						{seleccionado ? (
@@ -141,7 +153,7 @@ const Cotizador = () => {
 										className="px-1 mr-3 w-9/12"
 										type="text"
 										name="capacidad"
-										value={seleccionado[0].cadena}
+										defaultValue={seleccionado[0].cadena}
 									/>
 								</div>
 								<div className="flex items-center">
@@ -206,142 +218,34 @@ const Cotizador = () => {
 								<input type="checkbox" />
 							</th>
 							<th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-								<div className="flex items-center justify-center">
-									Nombre
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										className="h-4 w-4"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-										/>
-									</svg>
-								</div>
+								<div className="flex items-center justify-center">Nombre</div>
 							</th>
 							<th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
 								<div className="flex items-center justify-center">
 									Capacidad
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										className="h-4 w-4"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-										/>
-									</svg>
 								</div>
 							</th>
 							<th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-								<div className="flex items-center justify-center">
-									Peso
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										className="h-4 w-4"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-										/>
-									</svg>
-								</div>
+								<div className="flex items-center justify-center">Peso</div>
 							</th>
 							<th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-								<div className="flex items-center justify-center">
-									Precio
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										className="h-4 w-4"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-										/>
-									</svg>
-								</div>
+								<div className="flex items-center justify-center">Precio</div>
 							</th>
 							<th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-								<div className="flex items-center justify-center">
-									Cantidad
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										className="h-4 w-4"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-										/>
-									</svg>
-								</div>
+								<div className="flex items-center justify-center">Cantidad</div>
 							</th>
 							<th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
 								<div className="flex items-center justify-center">
 									Costo Total
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										className="h-4 w-4"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-										/>
-									</svg>
 								</div>
 							</th>
 							<th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-								<div className="flex items-center justify-center">
-									Action
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										className="h-4 w-4"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-										/>
-									</svg>
-								</div>
+								<div className="flex items-center justify-center">Action</div>
 							</th>
 						</tr>
 					</thead>
 					<tbody>
-						{tabla.length > 0 ? (
+						{tabla.length > 0 &&
 							tabla.map((tabla) => {
 								return (
 									<tr
@@ -358,25 +262,19 @@ const Cotizador = () => {
 										<td className="p-2 border-r">{tabla.cantidad}</td>
 										<td className="p-2 border-r">{tabla.costoTotal}</td>
 										<td>
-											<a
-												href="#"
-												className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin"
-											>
+											<button className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin mr-2">
 												Edit
-											</a>
-											<a
-												href="#"
+											</button>
+											<button
+												onClick={(e) => removeTool(tabla.id)}
 												className="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin"
 											>
 												Remove
-											</a>
+											</button>
 										</td>
 									</tr>
 								);
-							})
-						) : (
-							<h1 className="text-red text-2xl pl-4 py-4">No hay datos</h1>
-						)}
+							})}
 					</tbody>
 				</table>
 
